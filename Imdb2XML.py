@@ -7,15 +7,22 @@ import string
 
 
 # Main function
-def Imdb2XML(strDocPathFilename, strRemovedStrings=None):
+def Imdb2XML(strMode,strDocPathFilename, strRemovedStrings=None):
 
 	if strRemovedStrings is not None:
 		aRemovedStrings = strRemovedStrings.split(",")
 	else:
 		aRemovedStrings = None
 
-	strXmlPathFilename = strDocPathFilename + ".xml"
-
+	if strMode == "File":
+		strXmlPathFilename = strDocPathFilename + ".xml"
+	else:
+		if strMode == "ADS":
+			strXmlPathFilename = strDocPathFilename + ":MetaDirectory.xml"
+		else:
+			print "Wrong operation mode : %s" % strMode.encode(sys.stdout.encoding, 'replace')
+			return(0)
+		
 	if os.path.isfile(strXmlPathFilename):
 		print "XML File exists"
 		return(0)
@@ -109,11 +116,11 @@ def Imdb2XML(strDocPathFilename, strRemovedStrings=None):
 # Call main
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print "Only first argument is required, second is optional:"
-		print '  %s "movie title" "remove strings"' % sys.argv[0]
+		print "Only two arguments are required, third is optional:"
+		print '  %s "File|ADS" "movie title" "remove strings"' % sys.argv[0]
 		sys.exit(2)
 
-	if len(sys.argv) > 2:
-		Imdb2XML(sys.argv[1], sys.argv[2])
+	if len(sys.argv) > 3:
+		Imdb2XML(sys.argv[1], sys.argv[2], sys.argv[3])
 	else:
-		Imdb2XML(sys.argv[1])
+		Imdb2XML(sys.argv[1], sys.argv[2])

@@ -3,19 +3,20 @@ import os
 import sys
 import Imdb2XML
 
-if len(sys.argv) < 3:
+if len(sys.argv) < 4:
     print "Usage"
-    print '  %s "Target Dir" "File Types" "Keywords"' % sys.argv[0]
+    print '  %s "File|ADS" "Target Dir" "File Types" "Keywords"' % sys.argv[0]
     sys.exit(2)
 
 FileTypes = {}
 
-strSourceDir = unicode(sys.argv[1],"UTF-8")
+strMode = sys.argv[1]
+strSourceDir = unicode(sys.argv[2],"UTF-8")
 
-strFileTypes = sys.argv[2]
+strFileTypes = sys.argv[3]
 strKeywords =  None
-if len(sys.argv) > 3:
-	strKeywords = sys.argv[3]
+if len(sys.argv) > 4:
+	strKeywords = sys.argv[4]
 
 aFileTypes =strFileTypes.split(',')
 for i in range(len(aFileTypes)): 
@@ -30,8 +31,8 @@ for root, subFolders, files in os.walk(strSourceDir):
 			if fileExtension.lower() in aFileTypes : 
 				print "File %s , %s " % (fileExtension,Mediafile.encode('ascii','replace'))
 				if strKeywords is not None:
-					Imdb2XML.Imdb2XML(fullfile, strKeywords)
+					Imdb2XML.Imdb2XML(strMode,fullfile, strKeywords)
 				else : 
-					Imdb2XML.Imdb2XML(fullfile)
+					Imdb2XML.Imdb2XML(strMode,fullfile)
 
 	
